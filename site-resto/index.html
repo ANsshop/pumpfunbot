@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bistrot Garance</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Bistrot de quartier à la Croix-Rousse : cuisine de marché, ardoise du jour, vins nature. Réservation en ligne.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Caveat:wght@500;700&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout : en-tête collant, hero en deux colonnes (identité + ardoise du jour), sections pleine largeur alternées, contenu max 1120px. */
+:root {
+  --paper: #F4F6F1;
+  --paper-2: #E9EDE5;
+  --ink: #1B2A23;
+  --muted: #56665D;
+  --line: #D5DCD2;
+  --slate: #22302A;
+  --chalk: #EEF1E8;
+  --chalk-dim: #A9B5AC;
+  --brass: #C8962E;
+  --brass-ink: #855F14;
+  --ok: #2F7D4F;
+  --closed: #A2442F;
+  --f-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-chalk: "Caveat", "Comic Sans MS", cursive;
+  --max: 1120px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111915; --paper-2: #17211C; --ink: #E6EBE3; --muted: #9AA99F; --line: #2A3830;
+    --slate: #1A2620; --chalk: #EEF1E8; --chalk-dim: #9DAA9F; --brass: #D9AA4C; --brass-ink: #E2B95F;
+    --ok: #5DBB83; --closed: #E07F67; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #111915; --paper-2: #17211C; --ink: #E6EBE3; --muted: #9AA99F; --line: #2A3830;
+  --slate: #1A2620; --chalk: #EEF1E8; --chalk-dim: #9DAA9F; --brass: #D9AA4C; --brass-ink: #E2B95F;
+  --ok: #5DBB83; --closed: #E07F67; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.05; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 4px; }
+
+.wrap { max-width: var(--max); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--brass-ink); }
+.section { padding-block: 72px; border-top: 1px solid var(--line); }
+.section-head { display: grid; gap: 10px; margin-bottom: 36px; max-width: 640px; }
+.section-head h2 { font-size: clamp(30px, 4.4vw, 44px); font-weight: 700; letter-spacing: -.02em; }
+.section-head p { color: var(--muted); }
+
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 999px; font: 600 15px/1 var(--f-body); text-decoration: none; border: 1.5px solid var(--ink); cursor: pointer; transition: background .15s, color .15s; }
+.btn-solid { background: var(--ink); color: var(--paper); }
+.btn-solid:hover { background: var(--brass-ink); border-color: var(--brass-ink); }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn-ghost:hover { background: var(--paper-2); }
+
+/* Bandeau démo */
+.demo-bar { background: var(--brass); color: #1B2A23; font-size: 13px; font-weight: 600; text-align: center; padding-block: 6px; }
+
+/* En-tête */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.brand { font: 800 22px/1 var(--f-display); letter-spacing: -.02em; text-decoration: none; }
+.brand small { font: 500 12px/1 var(--f-body); color: var(--muted); letter-spacing: .06em; margin-left: 8px; }
+.nav { display: flex; align-items: center; gap: 22px; }
+.nav a:not(.btn) { text-decoration: none; font-weight: 500; color: var(--muted); }
+.nav a:not(.btn):hover { color: var(--ink); }
+.nav .btn { padding: 9px 16px; font-size: 14px; }
+@media (max-width: 760px) { .nav a:not(.btn) { display: none; } .brand small { display: none; } }
+
+/* Hero */
+.hero .wrap { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; padding-block: 64px 72px; }
+.hero-copy { display: grid; gap: 22px; min-width: 0; }
+.hero h1 { font-size: clamp(56px, 10vw, 112px); font-weight: 800; letter-spacing: -.045em; }
+.hero h1 span { color: var(--brass-ink); }
+.lede { font-size: 19px; color: var(--muted); max-width: 30em; }
+.status { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; padding: 8px 14px 8px 12px; border: 1px solid var(--line); border-radius: 999px; width: fit-content; background: var(--paper-2); }
+.status i { width: 9px; height: 9px; border-radius: 50%; background: var(--closed); box-shadow: 0 0 0 4px color-mix(in srgb, var(--closed) 20%, transparent); }
+.status.open i { background: var(--ok); box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 22%, transparent); }
+.status span { color: var(--muted); font-weight: 500; }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; padding-block: 40px 56px; } }
+
+/* Ardoise */
+.ardoise { position: relative; background: var(--slate); color: var(--chalk); border-radius: 6px; padding: 30px 30px 26px; border: 10px solid #6B4E2E; box-shadow: 0 18px 40px -18px rgba(0,0,0,.45), inset 0 0 60px rgba(0,0,0,.35); transform: rotate(-1deg); min-width: 0; }
+.ardoise::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px); background-size: 5px 5px; pointer-events: none; }
+.ardoise h2 { font: 700 40px/1 var(--f-chalk); text-align: center; letter-spacing: .01em; }
+.ardoise .date { font: 500 22px/1 var(--f-chalk); text-align: center; color: var(--chalk-dim); margin-top: 4px; }
+.ardoise ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 14px; }
+.ardoise li { display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; font-family: var(--f-chalk); align-items: baseline; }
+.ardoise .k { font-size: 17px; letter-spacing: .1em; text-transform: uppercase; color: var(--brass); grid-column: 1 / -1; font-weight: 700; }
+.ardoise .d { font-size: 25px; line-height: 1.1; }
+.ardoise .p { font-size: 25px; font-weight: 700; }
+.ardoise .formule { margin-top: 22px; padding-top: 16px; border-top: 1.5px dashed color-mix(in srgb, var(--chalk) 35%, transparent); font: 700 26px/1.2 var(--f-chalk); text-align: center; }
+.ardoise .formule span { display: block; font-weight: 500; font-size: 20px; color: var(--chalk-dim); }
+
+/* Carte */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+.tab { font: 600 15px/1 var(--f-body); padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; }
+@media (max-width: 760px) { .menu { grid-template-columns: 1fr; } }
+.dish { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding-block: 18px; border-bottom: 1px dashed var(--line); min-width: 0; }
+.dish h3 { font: 600 18px/1.3 var(--f-body); }
+.dish .price { font: 700 18px/1.3 var(--f-display); font-variant-numeric: tabular-nums; }
+.dish p { grid-column: 1 / -1; color: var(--muted); font-size: 15px; }
+.tags { display: inline-flex; gap: 6px; margin-left: 8px; vertical-align: 2px; }
+.tag { font: 600 11px/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase; padding: 4px 7px; border-radius: 4px; background: var(--paper-2); color: var(--brass-ink); border: 1px solid var(--line); }
+.menu-note { margin-top: 22px; color: var(--muted); font-size: 14px; }
+
+/* Maison */
+.maison .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: start; }
+@media (max-width: 860px) { .maison .wrap { grid-template-columns: 1fr; gap: 32px; } }
+.story { display: grid; gap: 18px; max-width: 36em; min-width: 0; }
+.story p { font-size: 18px; }
+.story .sign { font: 700 30px/1 var(--f-chalk); color: var(--brass-ink); }
+.facts { display: grid; gap: 0; border-top: 2px solid var(--ink); }
+.fact { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding-block: 18px; border-bottom: 1px solid var(--line); align-items: baseline; }
+.fact b { font: 800 34px/1 var(--f-display); letter-spacing: -.02em; }
+.fact span { color: var(--muted); }
+
+/* Avis */
+.reviews { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 860px) { .reviews { grid-template-columns: 1fr; } }
+.review { display: grid; gap: 12px; align-content: start; padding: 24px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper-2); }
+.stars { color: var(--brass); letter-spacing: 2px; font-size: 17px; }
+.review blockquote { margin: 0; font-size: 17px; }
+.review cite { font-style: normal; font-weight: 600; font-size: 14px; color: var(--muted); }
+
+/* Infos */
+.infos { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+@media (max-width: 860px) { .infos { grid-template-columns: 1fr; gap: 36px; } }
+.hours { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.hours th, .hours td { text-align: left; padding: 11px 0; border-bottom: 1px solid var(--line); font-weight: 500; }
+.hours th { width: 40%; }
+.hours td { color: var(--muted); }
+.hours tr.today th, .hours tr.today td { color: var(--ink); font-weight: 700; }
+.hours tr.today th::after { content: "aujourd'hui"; margin-left: 10px; font: 600 11px/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--brass-ink); }
+.contact { display: grid; gap: 22px; align-content: start; }
+.contact dl { margin: 0; display: grid; gap: 18px; }
+.contact dt { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.contact dd { margin: 0; font-size: 19px; font-weight: 500; }
+.contact dd a { text-decoration-color: var(--brass); text-underline-offset: 4px; }
+
+/* Réservation */
+.resa { background: var(--slate); color: var(--chalk); border-top: 0; }
+.resa .eyebrow { color: var(--brass); }
+.resa .section-head p { color: var(--chalk-dim); }
+.resa-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: start; }
+@media (max-width: 860px) { .resa-grid { grid-template-columns: 1fr; gap: 28px; } }
+.resa-aside { display: grid; gap: 14px; color: var(--chalk-dim); min-width: 0; }
+.resa-aside strong { color: var(--chalk); }
+.resa-aside .big { font: 700 34px/1.1 var(--f-chalk); color: var(--chalk); }
+form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 560px) { form { grid-template-columns: 1fr; } }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+label { font-size: 13px; font-weight: 600; letter-spacing: .04em; color: var(--chalk-dim); }
+input, select, textarea { font: 16px/1.4 var(--f-body); color: var(--chalk); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.18); border-radius: 8px; padding: 12px 14px; width: 100%; color-scheme: dark; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--brass); outline-offset: 1px; border-color: transparent; }
+textarea { resize: vertical; min-height: 90px; }
+.resa .btn-solid { background: var(--brass); color: #1B2A23; border-color: var(--brass); }
+.resa .btn-solid:hover { background: var(--chalk); border-color: var(--chalk); }
+.form-foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+.form-foot small { color: var(--chalk-dim); }
+.confirm { grid-column: 1 / -1; padding: 16px 18px; border-radius: 8px; background: rgba(255,255,255,.08); border: 1px solid var(--brass); font-weight: 500; }
+
+footer { padding-block: 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<div id="demo-bar" class="demo-bar" hidden>Site de démonstration · restaurant et contenus fictifs</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#accueil" id="brand">Garance</a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="#carte">La carte</a>
+      <a href="#maison">La maison</a>
+      <a href="#infos">Horaires &amp; accès</a>
+      <a class="btn btn-solid" href="#reserver">Réserver</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="accueil">
+    <div class="wrap">
+      <div class="hero-copy">
+        <div class="eyebrow" id="hero-eyebrow"></div>
+        <h1 id="hero-title"></h1>
+        <p class="lede" id="hero-lede"></p>
+        <div class="status" id="status" role="status"><i></i><b></b><span></span></div>
+        <div class="ctas">
+          <a class="btn btn-solid" href="#reserver">Réserver une table</a>
+          <a class="btn btn-ghost" href="#carte">Voir la carte</a>
+        </div>
+      </div>
+      <aside class="ardoise" aria-labelledby="ardoise-title">
+        <h2 id="ardoise-title">L'ardoise du jour</h2>
+        <div class="date" id="ardoise-date"></div>
+        <ul id="ardoise-list"></ul>
+        <div class="formule" id="ardoise-formule"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" id="carte">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">La carte</div>
+        <h2 id="carte-title"></h2>
+        <p id="carte-intro"></p>
+      </div>
+      <div class="tabs" role="tablist" id="tabs" aria-label="Rubriques de la carte"></div>
+      <div class="menu" id="menu" role="tabpanel"></div>
+      <p class="menu-note" id="menu-note"></p>
+    </div>
+  </section>
+
+  <section class="section maison" id="maison">
+    <div class="wrap">
+      <div class="story">
+        <div class="eyebrow">La maison</div>
+        <h2 style="margin:0;font-size:clamp(30px,4.4vw,44px);font-weight:700;letter-spacing:-.02em" id="maison-title"></h2>
+        <div id="maison-text" style="display:grid;gap:16px"></div>
+        <div class="sign" id="maison-sign"></div>
+      </div>
+      <div class="facts" id="facts"></div>
+    </div>
+  </section>
+
+  <section class="section" id="avis">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Ils sont venus</div>
+        <h2 id="avis-title"></h2>
+      </div>
+      <div class="reviews" id="reviews"></div>
+    </div>
+  </section>
+
+  <section class="section" id="infos">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Horaires &amp; accès</div>
+        <h2>Où et quand nous trouver</h2>
+      </div>
+      <div class="infos">
+        <table class="hours" aria-label="Horaires d'ouverture"><tbody id="hours"></tbody></table>
+        <div class="contact">
+          <dl>
+            <div><dt>Adresse</dt><dd id="c-address"></dd></div>
+            <div><dt>Téléphone</dt><dd id="c-phone"></dd></div>
+            <div><dt>E-mail</dt><dd id="c-email"></dd></div>
+            <div><dt>Accès</dt><dd id="c-access" style="font-size:16px;color:var(--muted)"></dd></div>
+          </dl>
+          <a class="btn btn-ghost" id="c-map" target="_blank" rel="noopener" style="width:fit-content">Ouvrir l'itinéraire</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section resa" id="reserver">
+    <div class="wrap">
+      <div class="resa-grid">
+        <div class="resa-aside">
+          <div class="eyebrow">Réservation</div>
+          <div class="big">Une table pour ce soir&nbsp;?</div>
+          <p id="resa-text"></p>
+          <p>Pour un groupe de plus de 8 personnes, appelez-nous au <strong id="resa-phone"></strong>.</p>
+        </div>
+        <form id="resa-form" novalidate>
+          <div class="field"><label for="r-name">Nom</label><input id="r-name" name="nom" autocomplete="name" required placeholder="Camille Martin"></div>
+          <div class="field"><label for="r-phone">Téléphone</label><input id="r-phone" name="telephone" type="tel" autocomplete="tel" required placeholder="06 12 34 56 78"></div>
+          <div class="field"><label for="r-date">Date</label><input id="r-date" name="date" type="date" required></div>
+          <div class="field"><label for="r-time">Heure</label><select id="r-time" name="heure" required></select></div>
+          <div class="field"><label for="r-covers">Couverts</label><select id="r-covers" name="couverts"></select></div>
+          <div class="field"><label for="r-email">E-mail (facultatif)</label><input id="r-email" name="email" type="email" autocomplete="email" placeholder="camille@exemple.fr"></div>
+          <div class="field full"><label for="r-msg">Une précision&nbsp;?</label><textarea id="r-msg" name="message" placeholder="Allergie, anniversaire, chaise bébé…"></textarea></div>
+          <div class="form-foot">
+            <small>Nous confirmons chaque réservation par SMS.</small>
+            <button class="btn btn-solid" type="submit">Envoyer la demande</button>
+          </div>
+          <div class="confirm" id="confirm" role="alert" hidden></div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span id="f-left"></span>
+    <span id="f-right"></span>
+  </div>
+</footer>
+
+<script>
+/* ================================================================
+   CONFIGURATION : c'est le seul bloc à modifier pour un nouveau client.
+   ================================================================ */
+const CONFIG = {
+  demo: true,                       // false = retire le bandeau « démonstration »
+  name: "Garance",
+  type: "Bistrot de quartier",
+  city: "Lyon · Croix-Rousse",
+  tagline: "Cuisine de marché, vins de vignerons et une ardoise qui change chaque matin selon ce que rapportent les producteurs du plateau.",
+  formEndpoint: "",                 // URL Formspree (https://formspree.io/f/xxxx) ; vide = confirmation locale
+
+  ardoise: {
+    items: [
+      { k: "Entrée", d: "Œuf parfait, crème de cèpes, noisettes", p: "9 €" },
+      { k: "Plat", d: "Joue de bœuf braisée 7 h, purée au beurre", p: "19 €" },
+      { k: "Plat", d: "Dos de lieu jaune, poireaux, beurre blanc", p: "21 €" },
+      { k: "Dessert", d: "Tarte fine aux pommes, caramel salé", p: "8 €" },
+    ],
+    formule: "Midi : entrée + plat ou plat + dessert",
+    formulePrice: "19 €",
+    formuleNote: "du mardi au vendredi",
+  },
+
+  menuTitle: "Courte, de saison, faite ici",
+  menuIntro: "Tout est préparé dans notre cuisine à partir de produits frais. La carte change avec les saisons, l'ardoise tous les jours.",
+  menu: {
+    "Entrées": [
+      { n: "Terrine de campagne maison", d: "Pickles de légumes, pain de la boulangerie voisine", p: 9 },
+      { n: "Velouté de potimarron", d: "Châtaignes grillées, huile de noisette", p: 8, t: ["végé"] },
+      { n: "Saucisson brioché", d: "Sauce au vin rouge, salade de mâche", p: 11 },
+      { n: "Burrata des Pouilles", d: "Betteraves rôties, agrumes, pistou", p: 12, t: ["végé"] },
+    ],
+    "Plats": [
+      { n: "Quenelle de brochet", d: "Sauce Nantua, riz pilaf", p: 20 },
+      { n: "Suprême de volaille fermière", d: "Jus corsé, gratin dauphinois", p: 22 },
+      { n: "Risotto aux champignons des bois", d: "Parmesan 24 mois, roquette", p: 18, t: ["végé"] },
+      { n: "Andouillette AAAAA", d: "Sauce moutarde, frites maison", p: 19 },
+    ],
+    "Desserts": [
+      { n: "Tarte aux pralines roses", d: "Recette lyonnaise, crème fouettée", p: 8 },
+      { n: "Mousse au chocolat noir 70 %", d: "Fleur de sel, tuile aux amandes", p: 8, t: ["sans gluten"] },
+      { n: "Cervelle de canut", d: "Fromage blanc, ciboulette, échalote", p: 7 },
+      { n: "Assiette de fromages affinés", d: "Saint-Marcellin, comté 18 mois, chèvre frais", p: 11 },
+    ],
+    "Vins": [
+      { n: "Beaujolais-Villages", d: "Rouge · verre 6 € · bouteille", p: 28 },
+      { n: "Côtes-du-Rhône", d: "Rouge, nature · bouteille", p: 36 },
+      { n: "Mâcon-Villages", d: "Blanc · verre 7 € · bouteille", p: 32 },
+      { n: "Crozes-Hermitage", d: "Rouge · bouteille", p: 42 },
+    ],
+  },
+  menuNote: "Prix nets, service compris. Liste des allergènes disponible sur demande.",
+
+  maisonTitle: "Un bistrot de quartier, simplement",
+  maisonText: [
+    "Garance a ouvert en 2019 dans une ancienne mercerie de la rue d'Austerlitz. Vingt-huit couverts, un zinc d'origine et une cuisine ouverte sur la salle.",
+    "Chaque matin, on passe au marché de la Croix-Rousse et on écrit l'ardoise avec ce qu'on y trouve. Le pain vient de la boulangerie d'à côté, les vins de vignerons qu'on connaît par leur prénom.",
+  ],
+  maisonSign: "Léa & Thomas",
+  facts: [
+    { b: "28", s: "couverts, plus 12 en terrasse aux beaux jours" },
+    { b: "4", s: "producteurs du plateau livrent la cuisine chaque semaine" },
+    { b: "19 €", s: "la formule du midi, du mardi au vendredi" },
+  ],
+
+  reviewsTitle: "Ce qu'on dit de nous",
+  reviews: [
+    { q: "La joue de bœuf est fondante, le service souriant et les vins bien choisis. Notre adresse du vendredi soir.", a: "Sophie R.", s: 5 },
+    { q: "Formule du midi imbattable pour le quartier. On sent que tout est fait maison.", a: "Karim B.", s: 5 },
+    { q: "Petit lieu chaleureux, il vaut mieux réserver le week-end. La tarte aux pralines vaut le détour.", a: "Hélène D.", s: 4 },
+  ],
+
+  // Horaires : 0 = dimanche … 6 = samedi. Tableau vide = fermé.
+  hours: {
+    1: [],
+    2: [["12:00", "14:30"], ["19:00", "22:30"]],
+    3: [["12:00", "14:30"], ["19:00", "22:30"]],
+    4: [["12:00", "14:30"], ["19:00", "22:30"]],
+    5: [["12:00", "14:30"], ["19:00", "23:00"]],
+    6: [["12:00", "15:00"], ["19:00", "23:00"]],
+    0: [["12:00", "15:00"]],
+  },
+  address: "14 rue d'Austerlitz, 69004 Lyon",
+  phone: "04 78 00 00 00",
+  email: "bonjour@bistrot-garance.fr",
+  access: "Métro C, arrêt Croix-Rousse (3 min à pied). Vélo'v place de la Croix-Rousse.",
+  resaText: "Réservez en ligne, nous vous répondons dans l'heure pendant le service. Les tables sont gardées 15 minutes.",
+  maxCovers: 8,
+};
+
+/* ================================================================
+   Rendu : pas besoin de toucher au code ci-dessous.
+   ================================================================ */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const DAYS = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+const fmtH = (t) => t.replace(":", "h").replace(/h00$/, "h");
+const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+const euro = (p) => (typeof p === "number" ? p.toLocaleString("fr-FR") + " €" : p);
+
+function render(c) {
+  document.title = `${c.type.split(" ")[0]} ${c.name}`;
+  $("demo-bar").hidden = !c.demo;
+  $("brand").innerHTML = `${esc(c.name)}<small>${esc(c.type.toUpperCase())}</small>`;
+  $("hero-eyebrow").textContent = `${c.type} · ${c.city}`;
+  $("hero-title").innerHTML = `${esc(c.name)}<span>.</span>`;
+  $("hero-lede").textContent = c.tagline;
+
+  // Ardoise
+  const now = new Date();
+  $("ardoise-date").textContent = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+  $("ardoise-list").innerHTML = c.ardoise.items.map((i) =>
+    `<li><span class="k">${esc(i.k)}</span><span class="d">${esc(i.d)}</span><span class="p">${esc(i.p)}</span></li>`).join("");
+  $("ardoise-formule").innerHTML = `${esc(c.ardoise.formule)} · ${esc(c.ardoise.formulePrice)}<span>${esc(c.ardoise.formuleNote)}</span>`;
+
+  // Carte
+  $("carte-title").textContent = c.menuTitle;
+  $("carte-intro").textContent = c.menuIntro;
+  $("menu-note").textContent = c.menuNote;
+  const cats = Object.keys(c.menu);
+  const showCat = (cat) => {
+    [...$("tabs").children].forEach((b) => b.setAttribute("aria-selected", b.dataset.cat === cat));
+    $("menu").innerHTML = c.menu[cat].map((d) => `
+      <div class="dish">
+        <h3>${esc(d.n)}${d.t ? `<span class="tags">${d.t.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</span>` : ""}</h3>
+        <span class="price">${esc(euro(d.p))}</span>
+        <p>${esc(d.d)}</p>
+      </div>`).join("");
+  };
+  $("tabs").innerHTML = cats.map((cat) => `<button class="tab" role="tab" data-cat="${esc(cat)}">${esc(cat)}</button>`).join("");
+  $("tabs").onclick = (e) => { const b = e.target.closest(".tab"); if (b) showCat(b.dataset.cat); };
+  showCat(cats[0]);
+
+  // Maison
+  $("maison-title").textContent = c.maisonTitle;
+  $("maison-text").innerHTML = c.maisonText.map((p) => `<p>${esc(p)}</p>`).join("");
+  $("maison-sign").textContent = c.maisonSign;
+  $("facts").innerHTML = c.facts.map((f) => `<div class="fact"><b>${esc(f.b)}</b><span>${esc(f.s)}</span></div>`).join("");
+
+  // Avis
+  $("avis-title").textContent = c.reviewsTitle;
+  $("reviews").innerHTML = c.reviews.map((r) => `
+    <figure class="review" style="margin:0">
+      <div class="stars" aria-label="${r.s} sur 5">${"★".repeat(r.s)}${"☆".repeat(5 - r.s)}</div>
+      <blockquote>${esc(r.q)}</blockquote>
+      <cite>${esc(r.a)}</cite>
+    </figure>`).join("");
+
+  // Horaires + statut
+  const today = now.getDay();
+  $("hours").innerHTML = [1, 2, 3, 4, 5, 6, 0].map((d) => {
+    const slots = c.hours[d] || [];
+    const txt = slots.length ? slots.map(([a, b]) => `${fmtH(a)} – ${fmtH(b)}`).join(" · ") : "Fermé";
+    return `<tr class="${d === today ? "today" : ""}"><th scope="row">${DAYS[d]}</th><td>${txt}</td></tr>`;
+  }).join("");
+  const st = openStatus(c.hours, now);
+  $("status").classList.toggle("open", st.open);
+  $("status").querySelector("b").textContent = st.open ? "Ouvert" : "Fermé";
+  $("status").querySelector("span").textContent = st.detail;
+
+  // Contact
+  const telHref = "tel:" + c.phone.replace(/\s/g, "").replace(/^0/, "+33");
+  $("c-address").textContent = c.address;
+  $("c-phone").innerHTML = `<a href="${telHref}">${esc(c.phone)}</a>`;
+  $("c-email").innerHTML = `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`;
+  $("c-access").textContent = c.access;
+  $("c-map").href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(c.address);
+  $("resa-text").textContent = c.resaText;
+  $("resa-phone").textContent = c.phone;
+  $("f-left").textContent = `© ${now.getFullYear()} ${c.type} ${c.name} · ${c.address}`;
+  $("f-right").textContent = c.phone;
+
+  // Formulaire
+  const dateIn = $("r-date");
+  const iso = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  dateIn.min = iso(now);
+  dateIn.value = iso(now);
+  $("r-covers").innerHTML = Array.from({ length: c.maxCovers }, (_, i) =>
+    `<option value="${i + 1}"${i === 1 ? " selected" : ""}>${i + 1} personne${i ? "s" : ""}</option>`).join("");
+  const fillTimes = () => {
+    const d = new Date(dateIn.value + "T12:00");
+    const slots = c.hours[d.getDay()] || [];
+    const opts = [];
+    slots.forEach(([a, b]) => { for (let m = toMin(a); m <= toMin(b) - 60; m += 30) opts.push(`${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`); });
+    $("r-time").innerHTML = opts.length ? opts.map((t) => `<option value="${t}">${fmtH(t)}</option>`).join("") : `<option value="">Fermé ce jour-là</option>`;
+  };
+  dateIn.onchange = fillTimes;
+  fillTimes();
+
+  $("resa-form").onsubmit = async (e) => {
+    e.preventDefault();
+    const f = e.target, box = $("confirm");
+    const missing = ["r-name", "r-phone", "r-date", "r-time"].filter((id) => !$(id).value.trim());
+    if (missing.length) { box.hidden = false; box.textContent = "Il manque votre nom, votre téléphone, la date ou l'heure. Complétez-les pour envoyer la demande."; $(missing[0]).focus(); return; }
+    const data = Object.fromEntries(new FormData(f));
+    if (c.formEndpoint) {
+      try {
+        const r = await fetch(c.formEndpoint, { method: "POST", headers: { Accept: "application/json" }, body: new FormData(f) });
+        if (!r.ok) throw new Error();
+      } catch { box.hidden = false; box.textContent = `L'envoi n'a pas fonctionné. Appelez-nous au ${c.phone}, nous notons votre table.`; return; }
+    }
+    const when = new Date(data.date + "T12:00").toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+    box.hidden = false;
+    box.textContent = `Merci ${data.nom}. Demande reçue pour ${data.couverts} personne${data.couverts > 1 ? "s" : ""}, ${when} à ${fmtH(data.heure)}. Nous vous confirmons par SMS au ${data.telephone}.`;
+    f.querySelectorAll("input:not([type=date]), textarea").forEach((i) => (i.value = ""));
+  };
+}
+
+function openStatus(hours, now) {
+  const m = now.getHours() * 60 + now.getMinutes();
+  const today = hours[now.getDay()] || [];
+  for (const [a, b] of today) {
+    if (m >= toMin(a) && m < toMin(b)) return { open: true, detail: `jusqu'à ${fmtH(b)}` };
+    if (m < toMin(a)) return { open: false, detail: `ouvre aujourd'hui à ${fmtH(a)}` };
+  }
+  for (let i = 1; i <= 7; i++) {
+    const d = (now.getDay() + i) % 7, s = hours[d] || [];
+    if (s.length) return { open: false, detail: `réouverture ${i === 1 ? "demain" : DAYS[d].toLowerCase()} à ${fmtH(s[0][0])}` };
+  }
+  return { open: false, detail: "" };
+}
+
+render(CONFIG);
+</script>
+</body>
+</html>
